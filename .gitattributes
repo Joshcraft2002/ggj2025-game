@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+Assets/Models/Legacy/Lvl[[:space:]]1[[:space:]]MAp20.fbx filter=lfs diff=lfs merge=lfs -text
+Assets/Models/Lvl[[:space:]]1[[:space:]]MAp.fbx filter=lfs diff=lfs merge=lfs -text
