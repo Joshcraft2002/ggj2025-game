@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      plastic06_diffuse_0: 642273584587120391
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

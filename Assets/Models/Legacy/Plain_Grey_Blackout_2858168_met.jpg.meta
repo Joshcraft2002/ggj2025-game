@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plain_Grey_Blackout_2858168_met_0: 2219150615938945004
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
