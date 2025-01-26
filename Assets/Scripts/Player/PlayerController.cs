@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Force modifier based on bubble size")]
     [SerializeField] private float _floatForce = 2f;
 
+    [SerializeField] private Animator animation;
+
     private Vector3 _moveDirection;
     private bool _isBlowing = false;
 
@@ -58,6 +60,12 @@ public class PlayerController : MonoBehaviour
             _bubble.localScale = Mathf.Max(currentScale - _bubbleSizeChangeRate, 0f) * Vector3.one;
         }
         
+        animation.SetFloat("velocity", _rb.linearVelocity.x);
+
+        /*if (!Mathf.Approximately(_rb.linearVelocity.y, 0f))
+        {
+            animation.SetFloat("isFloat", _rb.linearVelocity.y);
+        }*/
     }
 
     private void FixedUpdate()

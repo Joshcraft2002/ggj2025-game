@@ -12,7 +12,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleCurves: 0
+    resampleCurves: 1
     optimizeGameObjects: 0
     removeConstantScaleCurves: 1
     motionNodeName: 
@@ -20,9 +20,9 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    importAnimatedCustomProperties: 0
-    importConstraints: 0
-    animationCompression: 1
+    importAnimatedCustomProperties: 1
+    importConstraints: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -35,7 +35,7 @@ ModelImporter:
       takeName: metarig.001|metarig.001Action
       internalID: 831724897359066892
       firstFrame: 1
-      lastFrame: 14
+      lastFrame: 15
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -43,7 +43,7 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
-      loopBlend: 0
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -143,7 +143,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: float
+      name: floatingg
       takeName: metarig.001|metarig.001Action
       internalID: -4355981696914661419
       firstFrame: 39
