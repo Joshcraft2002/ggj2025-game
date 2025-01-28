@@ -6,7 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Tutorial 1.unity
-    guid: f129147cb5216b646b494eac2628663c
+    path: Assets/Scenes/Menu.unity
+    guid: ea4a9051375b8714d97555f67d807322
+  - enabled: 1
+    path: Assets/Scenes/markimoo 1.unity
+    guid: 744bf2dc1d83f4843a413f90cbb4d800
+  - enabled: 1
+    path: Assets/Scenes/markimoo 2.unity
+    guid: 6c2dd7d4a070d3d4b8f33e60f4087bc3
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

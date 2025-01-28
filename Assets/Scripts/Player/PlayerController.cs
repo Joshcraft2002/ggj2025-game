@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Force modifier based on bubble size")]
     [SerializeField] private float _floatForce = 2f;
 
-    [SerializeField] private Animator animation;
+    [SerializeField] private Animator _animator;
 
     private Vector3 _moveDirection;
     private bool _isBlowing = false;
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
         // Get our references
         _rb = GetComponent<Rigidbody>();
 
-        GameManager.Instance.GamePaused.AddListener(CancelBlow);
+        GameManager.Instance.pause.AddListener(CancelBlow);
     }
 
     public void OnBlow(InputAction.CallbackContext context)
@@ -42,6 +42,12 @@ public class PlayerController : MonoBehaviour
         _moveDirection = new(inputDirection.x, 0f, 0f);
     }
 
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (context.started)
+            GameManager.Instance.TogglePause();
+    }
+
     private void CancelBlow()
     {
         _isBlowing = false;
@@ -60,11 +66,11 @@ public class PlayerController : MonoBehaviour
             _bubble.localScale = Mathf.Max(currentScale - _bubbleSizeChangeRate, 0f) * Vector3.one;
         }
         
-        animation.SetFloat("velocity", _rb.linearVelocity.x);
+        _animator.SetFloat("velocity", _rb.linearVelocity.x);
 
         /*if (!Mathf.Approximately(_rb.linearVelocity.y, 0f))
         {
-            animation.SetFloat("isFloat", _rb.linearVelocity.y);
+            _animator.SetFloat("isFloat", _rb.linearVelocity.y);
         }*/
     }
 

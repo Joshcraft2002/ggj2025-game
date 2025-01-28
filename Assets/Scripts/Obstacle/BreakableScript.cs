@@ -6,7 +6,6 @@ public class BreakableScript : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Breaker"))
-            Destroy(transform.parent.gameObject);
+        Destroy(transform.parent.gameObject);
     }
 }

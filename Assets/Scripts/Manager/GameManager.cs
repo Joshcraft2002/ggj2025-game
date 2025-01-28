@@ -1,19 +1,19 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
     // Singleton instance of the game manager
     public static GameManager Instance { get; private set; }
 
-    private UnityEvent _playerDeath = new();
-    private UnityEvent _gamePaused = new();
+    public UnityEvent death;
+    public UnityEvent pause;
 
-    public UnityEvent PlayerDeath => _playerDeath;
-    public UnityEvent GamePaused => _gamePaused;
+    [SerializeField]
+    private InputAction pauseAction;
 
-    // Check for game timescale
-    public bool isGameFrozen = false;
+    private bool gameFrozen = false;
 
     public enum GameState
     {
@@ -26,6 +26,34 @@ public class GameManager : MonoBehaviour
     }
 
     public GameState gameState = GameState.MAIN_MENU;
+
+    public bool GameFrozen
+    {
+        get { return gameFrozen; }
+        set { 
+            if (value)
+            {
+                gameFrozen = true;
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                gameFrozen = false;
+                Time.timeScale = 1f;
+            }         
+        }
+        
+    }
+
+    public bool IsPlaying
+    {
+        get { return gameState == GameState.PLAYING; }       
+    }
+
+    public bool IsTransitioning
+    {
+        get { return gameState == GameState.TRANSITION; }
+    }
 
     private void Awake()
     {
@@ -43,69 +71,40 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        PlayerDeath.AddListener(GameOver);
+        death.AddListener(GameOver);
     }
 
-    private void Update()
-    {
-        //Debug.Log(gameState);
-    }
-
-    public void GameOver()
+    void GameOver()
     {
         gameState = GameState.GAME_OVER;
         UIManager.Instance.hideTimer();
-        FreezeGame();
+        GameFrozen = true;
         UIManager.Instance.gameOverMenu.SetActive(true);    
     }
 
-    public void GameWin()
-    {
-        gameState = GameState.GAME_WIN;
-        UIManager.Instance.hideTimer();
-        FreezeGame();
-        UIManager.Instance.GameWin();
-    }
-
-    //toggle GamePaused
-    public void OnPause()
+    //toggle pause
+    public void TogglePause()
     {
         if (gameState != GameState.PLAYING && gameState != GameState.PAUSED)
             return;
 
-        if (!isGameFrozen)
+        if (!gameFrozen)
         {
-            GamePaused.Invoke();
-            FreezeGame();
+            pause.Invoke();
+            GameFrozen = true;
             gameState = GameState.PAUSED;
         }
         else
         {
-            UnfreezeGame();
+            GameFrozen = false;
             gameState = GameState.PLAYING;
         }
-        UIManager.Instance.pauseMenu.SetActive(isGameFrozen);
+        UIManager.Instance.pauseMenu.SetActive(gameFrozen);
     }
 
-    public void FreezeGame()
+    public static void QuitGame()
     {
-        isGameFrozen = true;
-        Time.timeScale = 0f;
+        Application.Quit();
     }
 
-    public void UnfreezeGame()
-    {
-        isGameFrozen = false;
-        Time.timeScale = 1f;
-    }
-
-    public bool IsPlaying()
-    {
-        return gameState == GameState.PLAYING;
-    }
-
-    public bool IsTransitioning()
-    {
-        return gameState == GameState.TRANSITION;
-    }
 }

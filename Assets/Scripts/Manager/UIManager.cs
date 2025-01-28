@@ -1,8 +1,7 @@
-using System;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -20,10 +19,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     public float highScore = float.MaxValue;
 
-    public SceneLoader sceneLoader;
     public GameObject pauseMenu;
-    public GameObject gameOverMenu;
+    public GameObject gameOverMenu;  
     public GameObject gameWinMenu;
+    public Button nextLevelButton;
+    public GameObject endOfAreaText;
     public GameObject timerObject;
     public GameObject newBestObject;
 
@@ -43,7 +43,6 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        LoadGame();
         HideUI();
     }
 
@@ -53,7 +52,27 @@ public class UIManager : MonoBehaviour
 
         //only run in scenes with timer object
         if (timerObject)
-            timerText.text = ConvertToTimeFormat(timer);
+            timerText.text = GameDataHandler.ConvertToTimeFormat(timer);
+    }
+
+    public void Resume()
+    {
+        GameManager.Instance.TogglePause();
+    }
+
+    public void LoadNextLevel()
+    {
+        SceneLoadManager.Instance.LoadNextLevel();
+    }
+
+    public void Restart()
+    {
+        SceneLoadManager.Instance.LoadLevel(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ReturnToMenu()
+    {
+        SceneLoadManager.Instance.ReturnToMenu();
     }
 
     public void hideTimer()
@@ -80,67 +99,21 @@ public class UIManager : MonoBehaviour
         newBestObject.SetActive(false);
     }
 
-    public void GameWin()
-    {
-        Debug.Log("Level Completed!");
+    public void CompleteLevel(string path, string fileName, bool endOfArea)
+    {       
         gameWinMenu.SetActive(true);
+        nextLevelButton.gameObject.SetActive(!endOfArea);
+        endOfAreaText.SetActive(endOfArea);
         if (timer < highScore)
         {           
             highScore = timer;
-            SaveGame();
+            GameDataHandler.SaveLevelData(highScore, path, fileName);
             newBestObject.SetActive(true);
         }
-        gameClearTime.text = ConvertToTimeFormat(timer);
-        bestClearTime.text = ConvertToTimeFormat(highScore);
+        gameClearTime.text = GameDataHandler.ConvertToTimeFormat(timer);
+        bestClearTime.text = GameDataHandler.ConvertToTimeFormat(highScore);
     }
 
-    public string ConvertToTimeFormat(float timer)
-    {
-        return Mathf.FloorToInt(timer / 60).ToString() + ":" + Mathf.FloorToInt(timer % 60).ToString("D2") + "." + Mathf.FloorToInt((timer * 1000) % 1000).ToString();
-    }
 
-    void SaveGame()
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/SaveData.dat");
-        SaveData data = new SaveData();
-        data.highScore = highScore;
-        bf.Serialize(file, data);
-        file.Close();
-        Debug.Log("Game data saved!");
-    }
-
-    void LoadGame()
-    {
-        if (!File.Exists(Application.persistentDataPath + "/SaveData.dat"))
-        {
-            Debug.Log("No save data found.");
-            return;
-        }
-
-        BinaryFormatter bf = new();
-        FileStream file = File.Open(Application.persistentDataPath + "/SaveData.dat", FileMode.Open);
-        SaveData data = (SaveData)bf.Deserialize(file);
-        file.Close();
-        highScore = data.highScore;
-        Debug.Log("Game data loaded!");
-
-    }
-
-    void ResetData()
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/SaveData.dat");
-        SaveData data = new SaveData();
-        data.highScore = float.MaxValue;
-        bf.Serialize(file, data);
-        file.Close();
-        Debug.Log("Game data reset!");
-    }
 }
 
-[Serializable]
-class SaveData
-{
-    public float highScore;
-}
